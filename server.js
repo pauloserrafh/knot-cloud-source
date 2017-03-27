@@ -10,6 +10,7 @@ if ((process.env.USE_APP_DYNAMICS || 'false').toLowerCase() === 'true') {
 var program = require('commander');
 var pjson = require('./package.json');
 var config = require('./config');
+var fs = require('fs')
 
 var parentConnection;
 
@@ -95,6 +96,15 @@ if (program.mqtt) {
   var mqttServer = require('./lib/mqttServer')(config, parentConnection);
   console.log(' done.');
 }
+//Need to create file first?
+//Is it the right place to do it?
+fs.writeFile('/etc/knot/.status', 'knot-fog', function (err) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("KNoT fog started");
+  }
+})
 
 process.on('SIGTERM', function(){
   console.log('SIGTERM caught, exiting');
